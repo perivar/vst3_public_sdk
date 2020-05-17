@@ -41,13 +41,23 @@
 #include <Windows.h>
 #include <algorithm>
 
+// PIN: 25.02.2020 - add cout support
+#include <iostream>
+
+// PIN: 25.02.2020 - use the new C++17 <filesystem> header
+#if defined(__MINGW32__)
+#include <filesystem>
+#else
 // The <experimental/filesystem> header is deprecated. It is superseded by the C++17 <filesystem> header.
 // You can define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING to silence the warning,
 // otherwise the build will fail in VS2019 16.3.0
-#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <experimental/filesystem>
+#endif
 
+#ifdef _MSC_VER
 #pragma comment(lib, "Shell32")
+#endif
 
 //------------------------------------------------------------------------
 extern "C" {
@@ -55,7 +65,12 @@ using InitModuleFunc = bool (PLUGIN_API*) ();
 using ExitModuleFunc = bool (PLUGIN_API*) ();
 }
 
+// PIN: 25.02.2020
+#if defined(__MINGW32__)
+using namespace std;
+#else
 using namespace std::experimental;
+#endif
 
 //------------------------------------------------------------------------
 namespace VST3 {
@@ -380,6 +395,9 @@ Module::PathList Module::getModulePaths ()
 //------------------------------------------------------------------------
 Module::SnapshotList Module::getSnapshots (const std::string& modulePath)
 {
+	// PIN: 04.03.2020 debugging the module used
+	std::cout << "* USING module_win32.cpp -> getSnapshots ..." << modulePath << "\n\n";
+
 	SnapshotList result;
 	auto path = getContentsDirectoryFromModuleExecutablePath (modulePath);
 	if (!path)
@@ -387,6 +405,18 @@ Module::SnapshotList Module::getSnapshots (const std::string& modulePath)
 
 	*path /= "Resources";
 	*path /= "Snapshots";
+
+	// PIN: 04.03.2020 debugging if the path exist
+	std::cout << "* Path: '" << path->u8string();
+	if (filesystem::exists(*path))
+	{
+		std::cout << "' exists. Looking for png files ...\n\n";
+	}
+	else
+	{
+		std::cout << "' does not exist!\n\n";
+		return result;
+	}
 
 	PathList pngList;
 	findFilesWithExt (*path, ".png", pngList, false);

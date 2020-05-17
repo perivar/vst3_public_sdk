@@ -35,6 +35,9 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
+// PIN: 06.04.2020 - added <algorithm> to include find
+#include <algorithm>
+
 #include "window.h"
 #include "public.sdk/source/vst/hosting/stringconvert.h"
 
@@ -70,7 +73,9 @@ static void removeWindow (Window* window)
 } // anonymous
 
 //------------------------------------------------------------------------
-static constexpr WCHAR* gWindowClassName = L"VSTSDK WindowClass";
+// PIN: 10.04.2020 - remove error ISO C++ forbids converting a string constant to 'WCHAR*' {aka 'wchar_t*'} [-Wwrite-strings]
+// static constexpr WCHAR* gWindowClassName = L"VSTSDK WindowClass";
+static const WCHAR* gWindowClassName = L"VSTSDK WindowClass";
 
 //------------------------------------------------------------------------
 WindowPtr Window::make (const std::string& name, Size size, bool resizeable,

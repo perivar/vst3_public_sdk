@@ -20,6 +20,9 @@
 
 #include <math.h>
 
+// PIN: 16.05.2020 - added cstdio to support printf 
+#include <cstdio>
+
 namespace Steinberg {
 namespace Vst {
 namespace mda {

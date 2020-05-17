@@ -117,10 +117,17 @@ extern CPluginFactory* gPluginFactory;
 
 
 //------------------------------------------------------------------------
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-	#define EXPORT_FACTORY	__attribute__ ((visibility ("default")))
+// changed by PIN 28.03.2020
+#if defined (__GNUC__)
+  #ifdef WIN32
+    #define EXPORT_FACTORY __declspec(dllexport)
+  #elif defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+	#define EXPORT_FACTORY   __attribute__ ((visibility ("default")))
+  #else
+    #define EXPORT_FACTORY
+  #endif
 #else
-	#define EXPORT_FACTORY
+  #define EXPORT_FACTORY
 #endif
 
 //------------------------------------------------------------------------

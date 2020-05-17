@@ -60,7 +60,10 @@ if(SMTG_ADD_VST3_HOSTING_SAMPLES)
                     ${audiohost_sources}
                     ${SDK_ROOT}/public.sdk/source/vst/hosting/module_win32.cpp )
                 set(audiohost_PLATFORM_LIBS)
-                set(APP_PROPERTIES	LINK_FLAGS "/SUBSYSTEM:console"	)
+                # PIN: 17.05.2020 - made sure these link flags are only used for MSVC and not MINGW
+                if(MSVC)
+                    set(APP_PROPERTIES	LINK_FLAGS "/SUBSYSTEM:console"	)
+                endif()
             endif()
 
             set(target audiohost)

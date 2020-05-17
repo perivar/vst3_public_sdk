@@ -24,7 +24,13 @@ if(SMTG_ADD_VSTGUI)
     smtg_add_vst3plugin(${target} ${noteexpressionsynth_sources})
     set_target_properties(${target} PROPERTIES ${SDK_IDE_PLUGIN_EXAMPLES_FOLDER})
     target_include_directories(${target} PUBLIC ${VSTGUI_ROOT}/vstgui4)
-    target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+
+    # PIN: 10.03.2020 - add libraries vstgui and the missing windows libraries
+    if(MINGW)
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support vstgui windowscodecs)
+    else()
+        target_link_libraries(${target} PRIVATE base sdk vstgui_support)
+    endif()
 
     smtg_add_vst3_resource(${target} "resource/note_expression_synth.uidesc")
     smtg_add_vst3_resource(${target} "resource/about.png")

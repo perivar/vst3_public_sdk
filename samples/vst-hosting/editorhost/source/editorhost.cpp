@@ -417,6 +417,9 @@ tresult PLUGIN_API WindowController::resizeView (IPlugView* view, ViewRect* newS
 	ViewRect r;
 	if (plugView->getSize (&r) != kResultTrue)
 		return kInternalError;
+
+	// PIN: 29.04.2020: there are some plugins that don't run correctly when this check is done.
+	// E.g. the ASPIK plugins need to disable this check because getSize is always newSize!
 	if (r == *newSize)
 		return kResultTrue;
 

@@ -39,6 +39,9 @@
 #include "public.sdk/samples/vst-hosting/editorhost/source/platform/win32/window.h"
 #include "public.sdk/source/vst/hosting/stringconvert.h"
 
+// PIN: 06.04.2020 - added <algorithm> to include find
+#include <algorithm>
+
 #include <Windows.h>
 #include <string>
 #include <vector>
